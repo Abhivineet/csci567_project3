@@ -29,11 +29,10 @@ def binary_train(X, y, loss="perceptron", w0=None, b0=None, step_size=0.5, max_i
     N, D = X.shape
     assert len(np.unique(y)) == 2
 
-
     w = np.zeros(D)
     if w0 is not None:
         w = w0
-    
+
     b = 0
     if b0 is not None:
         b = b0
@@ -44,28 +43,42 @@ def binary_train(X, y, loss="perceptron", w0=None, b0=None, step_size=0.5, max_i
         # gradient descent with step size "step_size"  #
         # to minimize perceptron loss                  # 
         ################################################
-
-        
-        
+        f = lambda x: 0 if x <= 0 else 1
+        # f = np.vectorize(l)
+        for iteration in max_iterations:
+            val = X@w + b
+            predictions = f(val)
+            grad_w = np.zeros(D)
+            grad_b = 0
+            for i in range(y):
+                if y[i]!=predictions[i]:
+                    grad_w += (y[i] - predictions[i])*X[i]
+                    grad_b += y[i] - predictions[i]
+            w += (step_size/N)*grad_w
+            b += (step_size/N)*grad_b
 
     elif loss == "logistic":
-        ################################################
-        # TODO 2 : perform "max_iterations" steps of   #
-        # gradient descent with step size "step_size"  #
-        # to minimize logistic loss                    # 
-        ################################################
+        f = lambda x: 0 if x<=0.5 else 1
+        val = X @ w + b
+        prediction =
+    ################################################
+    # TODO 2 : perform "max_iterations" steps of   #
+    # gradient descent with step size "step_size"  #
+    # to minimize logistic loss                    #
+    ################################################
 
-        
+
+
 
     else:
-        raise "Undefined loss function."
+        raise Exception("Undefined loss function.")
 
     assert w.shape == (D,)
     return w, b
 
 
 def sigmoid(z):
-    
+
     """
     Inputs:
     - z: a numpy array or a float number
@@ -77,8 +90,8 @@ def sigmoid(z):
     ############################################
     # TODO 3 : fill in the sigmoid function    #
     ############################################
-    
-    return value
+
+    return 1/(1 + np.exp(-z))
 
 
 def binary_predict(X, w, b):
@@ -94,21 +107,21 @@ def binary_predict(X, w, b):
     - preds: N-dimensional vector of binary predictions (either 0 or 1)
     """
     N, D = X.shape
-        
+
     #############################################################
     # TODO 4 : predict DETERMINISTICALLY (i.e. do not randomize)#
     #############################################################
-  
 
-    assert preds.shape == (N,) 
+
+    assert preds.shape == (N,)
     return preds
 
 
 def multiclass_train(X, y, C,
-                     w0=None, 
+                     w0=None,
                      b0=None,
                      gd_type="sgd",
-                     step_size=0.5, 
+                     step_size=0.5,
                      max_iterations=1000):
     """
     Inputs:
@@ -142,7 +155,7 @@ def multiclass_train(X, y, C,
     w = np.zeros((C, D))
     if w0 is not None:
         w = w0
-    
+
     b = np.zeros(C)
     if b0 is not None:
         b = b0
@@ -158,21 +171,21 @@ def multiclass_train(X, y, C,
             # "step_size" to minimize logistic loss. We already#
             # pick the index of the random sample for you (n)  #
             ####################################################			
-        
-        
+
+
 
     elif gd_type == "gd":
-        ####################################################
-        # TODO 6 : perform "max_iterations" steps of       #
-        # gradient descent with step size "step_size"      #
-        # to minimize logistic loss.                       #
-        ####################################################
-        
-        
+    ####################################################
+    # TODO 6 : perform "max_iterations" steps of       #
+    # gradient descent with step size "step_size"      #
+    # to minimize logistic loss.                       #
+    ####################################################
+
+
 
     else:
         raise "Undefined algorithm."
-    
+
 
     assert w.shape == (C, D)
     assert b.shape == (C,)
@@ -198,7 +211,7 @@ def multiclass_predict(X, w, b):
     # TODO 7 : predict DETERMINISTICALLY (i.e. do not randomize)#
     #############################################################
 
-    
+
     assert preds.shape == (N,)
     return preds
 
